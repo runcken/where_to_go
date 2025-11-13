@@ -26,7 +26,7 @@ class PlaceImage(models.Model):
         related_name='images'
     )
     image = models.ImageField(
-        # upload_to='media',
+        upload_to='media',
         verbose_name='Изображение'
     )
     order = models.PositiveIntegerField(default=0)
