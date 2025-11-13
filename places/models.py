@@ -7,29 +7,32 @@ class Place(models.Model):
     title = models.CharField("Название", max_length=200)
     description_short = models.TextField("Описание")
     description_long = models.TextField("Подробности")
-    # image = models.ImageField("Картинка")
     lng = models.FloatField(verbose_name='Долгота')
     lat = models.FloatField(verbose_name='Широта')
     
-
-    # author = models.ForeignKey(
-    #     User,
-    #     on_delete=models.CASCADE,
-    #     verbose_name="Автор",
-    #     limit_choices_to={'is_staff': True})
-    # likes = models.ManyToManyField(
-    #     User,
-    #     related_name="liked_posts",
-    #     verbose_name="Кто лайкнул",
-    #     blank=True)
-
     def __str__(self):
         return self.title
 
-    # def get_absolute_url(self):
-    #     return reverse('post_detail', args={'slug': self.slug})
-
     class Meta:
         ordering = ['title']
-        verbose_name = 'place'
-        verbose_name_plural = 'places'
+        verbose_name = 'место'
+        verbose_name_plural = 'места'
+
+
+class PlaceImage(models.Model):
+    place = models.ForeignKey(
+        Place,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    image = models.ImageField(
+        # upload_to='media',
+        verbose_name='Изображение'
+    )
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['-order']
+
+    def __str__(self):
+        return f'{self.order} {self.place.title}'
