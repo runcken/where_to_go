@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.templatetags.static import static
+from django.http import JsonResponse
+from django.urls import reverse
 import json
+from .models import Place
 
 
 def show_main(request):
@@ -8,33 +11,49 @@ def show_main(request):
 
 
 def index(request):
+    places = Place.objects.prefetch_related("images").all()
+
+    features = []
+    for place in places:
+        feature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [place.lng, place.lat]
+            },
+            "properties": {
+                "title": place.title,
+                "placeId": place.place_id,
+                "detailsUrl": reverse("place_details", kwargs={"place_id": place.place_id})
+            }
+        }
+        features.append(feature)
+
     geojson_data = {
         "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [37.62, 55.793676]
-                },
-                "properties": {
-                    "title": "«Легенды Москвы",
-                    "placeId": "moscow_legends",
-                    "detailsUrl": static('places/moscow_legends.json')
-                }
-            },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [37.64, 55.753676]
-                },
-                "properties": {
-                    "title": "Крыши24.рф",
-                    "placeId": "roofs24",
-                    "detailsUrl": static('places/roofs24.json')
-                }
-            }
-        ]
+        "features": features
     }
-    return render(request, 'index.html', {'geojson_data': geojson_data})
+    
+    return render(request, 'index.html', {"geojson_data": geojson_data})
+
+
+def place_details(request, place_id):
+    place = get_object_or_404(Place, place_id=place_id)
+
+    images = []
+    for image in place.images.all():
+        if image.image:
+            images.append(image.image.url)
+
+    place_data = {
+        "title": place.title,
+        "imgs": images,
+        "description_short": place.description_short,
+        "description_long": place.description_long,
+        "coordinates": {
+            "lat": place.lat,
+            "lng": place.lng
+        }
+    }
+
+    return JsonResponse(place_data, json_dumps_params={"ensure_ascii": False})
