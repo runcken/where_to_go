@@ -43,6 +43,8 @@ class PlaceImage(models.Model):
 
     class Meta:
         ordering = ['-order']
+        verbose_name = 'фотография'
+        verbose_name_plural = 'фотографии'
 
     def __str__(self):
         return f'{self.order} {self.place.title}'
