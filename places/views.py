@@ -11,30 +11,30 @@ def show_main(request):
 
 
 def index(request):
-    places = Place.objects.prefetch_related("images").all()
+    places = Place.objects.prefetch_related('images').all()
 
     features = []
     for place in places:
         feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [place.lng, place.lat]
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [place.lng, place.lat]
             },
-            "properties": {
-                "title": place.title,
-                "placeId": place.place_id,
-                "detailsUrl": reverse("place_details", kwargs={"place_id": place.place_id})
+            'properties': {
+                'title': place.title,
+                'placeId': place.place_id,
+                'detailsUrl': reverse('place_details', kwargs={'place_id': place.place_id})
             }
         }
         features.append(feature)
 
     geojson_data = {
-        "type": "FeatureCollection",
-        "features": features
+        'type': 'FeatureCollection',
+        'features': features
     }
     
-    return render(request, 'index.html', {"geojson_data": geojson_data})
+    return render(request, 'index.html', {'geojson_data': geojson_data})
 
 
 def place_details(request, place_id):
@@ -46,14 +46,14 @@ def place_details(request, place_id):
             images.append(image.image.url)
 
     place_data = {
-        "title": place.title,
-        "imgs": images,
-        "description_short": place.description_short,
-        "description_long": place.description_long,
-        "coordinates": {
-            "lat": place.lat,
-            "lng": place.lng
+        'title': place.title,
+        'imgs': images,
+        'description_short': place.description_short,
+        'description_long': place.description_long,
+        'coordinates': {
+            'lat': place.lat,
+            'lng': place.lng
         }
     }
 
-    return JsonResponse(place_data, json_dumps_params={"ensure_ascii": False})
+    return JsonResponse(place_data, json_dumps_params={'ensure_ascii': False})
