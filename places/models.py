@@ -49,6 +49,7 @@ class PlaceImage(models.Model):
         ordering = ['-order']
         verbose_name = 'фотография'
         verbose_name_plural = 'фотографии'
+        # unique_together = ['place', 'order']
 
     def __str__(self):
         return f'{self.order} {self.place.title}'
