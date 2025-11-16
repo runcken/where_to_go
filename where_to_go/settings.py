@@ -1,19 +1,24 @@
 from pathlib import Path
 import os
+from environs import Env
 
+env = Env()
+env.read_env()
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+SECRET_KEY = env.str('SECRET_KEY')
+
+DEBUG = env.bool('DEBUG', False)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-4k-)@@lj@+b&%oc(h+m^^n%%)#0bip!-sc$$9i)mjx)7aa8f*l"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
-# Application definition
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.getenv('DATABASE_NAME'),
+    }
+}
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -86,21 +91,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "where_to_go.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -115,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 LANGUAGE_CODE = "en-us"
 
