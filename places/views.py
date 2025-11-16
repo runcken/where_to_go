@@ -24,7 +24,10 @@ def index(request):
             'properties': {
                 'title': place.title,
                 'placeId': place.place_id,
-                'detailsUrl': reverse('place_details', kwargs={'place_id': place.place_id})
+                'detailsUrl': reverse(
+                    'place_details',
+                    kwargs={'place_id': place.place_id}
+                )
             }
         }
         features.append(feature)

@@ -1,13 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html
+from tinymce.models import HTMLField
 from django.contrib.auth.models import User
 
 
 class Place(models.Model):
     title = models.CharField('Название', max_length=200)
     description_short = models.TextField('Краткое описание')
-    description_long = models.TextField('Полное описание')
+    description_long = HTMLField('Полное описание')
     lng = models.FloatField(verbose_name='Долгота')
     lat = models.FloatField(verbose_name='Широта')
     place_id = models.SlugField(
@@ -63,3 +64,4 @@ class PlaceImage(models.Model):
         return 'Нет изображения'
 
     image_preview.short_description = 'Превью'
+    

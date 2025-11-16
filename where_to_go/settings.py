@@ -24,7 +24,36 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "places.apps.PlacesConfig",
     "adminsortable2",
+    "tinymce"
 ]
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': '100%',
+    'plugins': '''
+        textcolor save link image media preview codesample contextmenu
+        table code lists fullscreen insertdatetime nonbreaking
+        contextmenu directionality searchplace wordcount visualblocks
+        visualchars code fullscreen autolink lists charmap print hr
+        anchor pagebreak
+        ''',
+    'toolbar': '''
+        undo redo | formatselect | bold italic backcolor |
+        alignleft aligncenter alignright align justify |
+        bullist numlist outdent indent |removeformat | help
+        ''',
+        'menubar': True,
+        'statusbar': True,
+        'content_style': '''
+                body {
+                    white-space: pre-wrap;
+                    white-space: -moz-pre-wrap;
+                    white-space: -pre-wrap;
+                    white-space: -o-pre-wrap;
+                    word-wrap: break-word;
+                }
+            ''',
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
