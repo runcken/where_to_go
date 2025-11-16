@@ -6,10 +6,6 @@ import json
 from .models import Place
 
 
-def show_main(request):
-    return render(request, 'index.html')
-
-
 def index(request):
     places = Place.objects.prefetch_related('images').all()
 
