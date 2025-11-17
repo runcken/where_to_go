@@ -1,8 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from django.templatetags.static import static
 from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-import json
+
 from .models import Place
 
 
@@ -19,40 +18,43 @@ def index(request):
             },
             'properties': {
                 'title': place.title,
-                'placeId': place.place_id,
+                'placeId': place.id,
                 'detailsUrl': reverse(
                     'place_details',
-                    kwargs={'place_id': place.place_id}
+                    kwargs={'place_id': place.id}
                 )
             }
         }
         features.append(feature)
 
-    geojson_data = {
+    serialize_geojson = {
         'type': 'FeatureCollection',
         'features': features
     }
-    
-    return render(request, 'index.html', {'geojson_data': geojson_data})
+
+    return render(request, 'index.html', {'geojson_data': serialize_geojson})
 
 
 def place_details(request, place_id):
-    place = get_object_or_404(Place, place_id=place_id)
+    place = get_object_or_404(
+        Place.objects.prefetch_related('images'),
+        id=place_id
+    )
 
-    images = []
-    for image in place.images.all():
-        if image.image:
-            images.append(image.image.url)
+    images = [(image.image.url) for image in place.images.all() if image.image]
 
-    place_data = {
+    serialize_place = {
         'title': place.title,
         'imgs': images,
-        'description_short': place.description_short,
-        'description_long': place.description_long,
+        'description_short': place.short_description,
+        'description_long': place.long_description,
         'coordinates': {
             'lat': place.lat,
             'lng': place.lng
         }
     }
 
-    return JsonResponse(place_data, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(
+        serialize_place,
+        json_dumps_params={'ensure_ascii': False}
+    )

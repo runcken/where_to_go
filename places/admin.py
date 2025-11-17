@@ -1,12 +1,11 @@
-from django.contrib import admin
-from django.utils.html import format_html
-from adminsortable2.admin import(
+from adminsortable2.admin import (
     SortableInlineAdminMixin,
     SortableAdminBase,
     SortableAdminMixin
 )
+from django.contrib import admin
 from tinymce.widgets import TinyMCE
-from django import forms
+
 from .models import Place, PlaceImage
 
 
@@ -19,26 +18,25 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
 
 @admin.register(Place)
 class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
-    list_display = ['title', 'place_id', 'lng', 'lat']
-    list_editable = ['place_id']
-    search_fields = ['title', 'place_id']
+    list_display = ['title', 'lng', 'lat']
+    search_fields = ['title']
     inlines = [PlaceImageInline]
     fieldsets = (
         ('Основная информация', {
-            'fields': ('title', 'place_id', 'description_short')
+            'fields': ('title', 'short_description')
         }),
         ('Геоданные', {
             'fields': ('lng', 'lat'),
             'classes': ('collapse',)
         }),
         ('Полное описание', {
-            'fields': ('description_long',),
+            'fields': ('long_description',),
             'description': 'Используйте редактор для форматирования текста'
             }),
     )
 
     def formfield_for_dbfield(self, db_field, **kwargs):
-        if db_field.name == 'description_long':
+        if db_field.name == 'long_description':
             kwargs['widget'] = TinyMCE(attrs={'cols': 80, 'rows': 30})
         return super().formfield_for_dbfield(db_field, **kwargs)
 
@@ -46,3 +44,4 @@ class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
 @admin.register(PlaceImage)
 class PlaceImageAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['place', 'image', 'order']
+    raw_id_fields = ['place']

@@ -1,6 +1,7 @@
-from pathlib import Path
 import os
 from environs import Env
+from pathlib import Path
+
 
 env = Env()
 env.read_env()
@@ -47,17 +48,17 @@ TINYMCE_DEFAULT_CONFIG = {
         alignleft aligncenter alignright align justify |
         bullist numlist outdent indent |removeformat | help
         ''',
-        'menubar': True,
-        'statusbar': True,
-        'content_style': '''
-                body {
-                    white-space: pre-wrap;
-                    white-space: -moz-pre-wrap;
-                    white-space: -pre-wrap;
-                    white-space: -o-pre-wrap;
-                    word-wrap: break-word;
-                }
-            ''',
+    'menubar': True,
+    'statusbar': True,
+    'content_style': '''
+            body {
+                white-space: pre-wrap;
+                white-space: -moz-pre-wrap;
+                white-space: -pre-wrap;
+                white-space: -o-pre-wrap;
+                word-wrap: break-word;
+            }
+        ''',
 }
 
 MIDDLEWARE = [
