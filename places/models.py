@@ -12,16 +12,16 @@ class Place(models.Model):
     lng = models.FloatField(verbose_name='Долгота')
     lat = models.FloatField(verbose_name='Широта')
 
+    class Meta:
+        ordering = ['title']
+        verbose_name = 'место'
+        verbose_name_plural = 'места'
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('place_details', args=[self.id])
-
-    class Meta:
-        ordering = ['title']
-        verbose_name = 'место'
-        verbose_name_plural = 'места'
 
 
 class PlaceImage(models.Model):

@@ -6,18 +6,21 @@ from pathlib import Path
 env = Env()
 env.read_env()
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-
 SECRET_KEY = env.str('SECRET_KEY')
 
 DEBUG = env.bool('DEBUG', False)
+
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.getenv('DATABASE_NAME'),
+        'NAME': env.str('DATABASE_NAME', str(BASE_DIR / 'db.sqlite3')),
     }
 }
 
@@ -50,15 +53,6 @@ TINYMCE_DEFAULT_CONFIG = {
         ''',
     'menubar': True,
     'statusbar': True,
-    'content_style': '''
-            body {
-                white-space: pre-wrap;
-                white-space: -moz-pre-wrap;
-                white-space: -pre-wrap;
-                white-space: -o-pre-wrap;
-                word-wrap: break-word;
-            }
-        ''',
 }
 
 MIDDLEWARE = [
@@ -115,12 +109,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = os.getenv('STATIC')
+STATIC_URL = env.str('STATIC_URL', '/static/')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, os.getenv('STATIC_DIRS')), )
+STATICFILES_DIRS = [os.path.join(BASE_DIR, env.str('STATIC_DIRS', 'static'))]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, os.getenv('MEDIA_ROOT'))
+MEDIA_ROOT = os.path.join(BASE_DIR, env.str('MEDIA_ROOT', 'media'))
 
-MEDIA_URL = os.getenv('MEDIA')
+MEDIA_URL = env.str('MEDIA_URL', '/media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
