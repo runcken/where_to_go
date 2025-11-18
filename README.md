@@ -51,9 +51,10 @@ python3 manage.py load_place путь/к/файлу/filename.json
 
 Доступны переменные:
 - `DEBUG` — дебаг-режим. Поставьте `True`, чтобы увидеть отладочную информацию в случае ошибки.
-- `SECRET_KEY` — секретный ключ проекта
+- `SECRET_KEY` — секретный ключ проекта.
 - `DATABASE_FILEPATH` — полный путь к файлу базы данных SQLite, например: `/home/user/base.sqlite3`
 - `ALLOWED_HOSTS` — см [документацию Django](https://docs.djangoproject.com/en/5.2/ref/settings/#allowed-hosts)
+- `STATIC_URL`, `STATIC_ROOT`, `MEDIA_URL`, `MEDIA_ROOT` — статические файлы и медиа.
 
 
 ## Цели проекта
