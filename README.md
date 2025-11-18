@@ -40,7 +40,7 @@ python3 manage.py createsuperuser
 и команда
 
 ```
-python3 manage.py load_place путь/к/файлу/filename.json
+python3 manage.py load_place path/to/filename.json
 ```
 с необязательными атрибутами *--update* для обновления существующей записи и *--update  --clear-images* для удаления ранее загруженных изображений.
 
