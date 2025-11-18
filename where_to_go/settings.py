@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': env.str('DATABASE_NAME', str(BASE_DIR / 'db.sqlite3')),
+        'NAME': env.str('DATABASE_PATH', str(BASE_DIR / 'db.sqlite3')),
     }
 }
 
